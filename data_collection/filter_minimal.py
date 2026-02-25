@@ -21,8 +21,12 @@ def count_colors(image_path: str, max_colors: int = 256) -> int:
         max_colors: 最大分析颜色数
 
     Returns:
-        不同颜色的数量
+        不同颜色的数量，-1 表示无法分析
     """
+    # 跳过 SVG 文件（无法直接用 Pillow 分析）
+    if image_path.lower().endswith('.svg'):
+        return -2  # 特殊标记表示 SVG
+
     try:
         with Image.open(image_path) as img:
             # 转换为 RGB
@@ -109,6 +113,12 @@ def is_minimal_style(
         "dominant_colors": [],
         "size": (0, 0)
     }
+
+    # SVG 文件特殊处理 - 通常适合极简风格
+    if image_path.lower().endswith('.svg'):
+        result["color_count"] = -2  # SVG marker
+        result["passed"] = True
+        return True, result
 
     try:
         with Image.open(image_path) as img:

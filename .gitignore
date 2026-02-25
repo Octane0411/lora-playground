@@ -38,3 +38,8 @@ dataset/
 # OS
 .DS_Store
 Thumbs.db
+
+# Dataset files (too large)
+dataset/
+*.svg
+
