@@ -1,0 +1,59 @@
+# Simple Icons LoRA 训练配置
+# 第一次训练 - 试验版本
+
+model:
+  type: sdxl
+  # 基础模型，会自动下载
+  pretrained_model_name_or_path: "stabilityai/stable-diffusion-xl-base-1.0"
+  # 使用 BF16 混合精度，节省显存
+  dtype: bf16
+
+dataset:
+  # 数据路径
+  data_dir: "./dataset/simple_icons"
+  # 图片分辨率
+  resolution: 512
+  # 中心裁剪
+  center_crop: true
+  # 随机水平翻转（数据增强）
+  random_flip: true
+
+lora:
+  # LoRA 秩，第一次用 32 试试
+  r: 32
+  # LoRA alpha，通常是 r 的 1/2 或相等
+  lora_alpha: 16
+  # 哪些层加 LoRA
+  target_modules:
+    - "q_proj"
+    - "v_proj"
+    - "k_proj"
+    - "out_proj"
+    - "fc1"
+    - "fc2"
+
+training:
+  # 训练轮数
+  num_train_epochs: 5
+  # 批次大小，根据显存调整
+  batch_size: 2
+  # 学习率
+  learning_rate: 1.0e-4
+  # 学习率预热步数
+  warmup_steps: 100
+  # 梯度累积步数（显存不够时增大）
+  gradient_accumulation_steps: 4
+  # 每隔多少步保存检查点
+  save_steps: 500
+  # 日志记录间隔
+  logging_steps: 10
+  # 最大梯度范数，防止梯度爆炸
+  max_grad_norm: 1.0
+  # 是否使用 8bit Adam 优化器（节省显存）
+  adam8bit: true
+
+output:
+  # 输出目录
+  output_dir: "./output/simple-icons-lora"
+  # 模型名称
+  model_name: "simple-icons-v1"
