@@ -2,6 +2,36 @@
 
 > 目标：创建一个专门生成技术项目极简风格 Logo 的图像生成模型
 
+## 🔗 项目链接
+
+- **GitHub 仓库**（训练代码和工具）: https://github.com/Octane0411/lora-playground
+- **Hugging Face 模型**（训练好的 LoRA 权重）: https://huggingface.co/ReservedNoName/sdxl-simple-icons-lora
+
+## 🚀 快速使用
+
+```python
+from diffusers import DiffusionPipeline
+import torch
+
+# 加载 SDXL 基础模型
+pipe = DiffusionPipeline.from_pretrained(
+    "stabilityai/stable-diffusion-xl-base-1.0",
+    torch_dtype=torch.float16
+).to("cuda")
+
+# 加载 LoRA 权重
+pipe.load_lora_weights("ReservedNoName/sdxl-simple-icons-lora")
+
+# 生成 logo
+image = pipe(
+    "minimalist tech logo of React, geometric shape, flat design, single color",
+    num_inference_steps=50,
+    guidance_scale=12.0
+).images[0]
+
+image.save("my_logo.png")
+```
+
 ---
 
 ## 项目定位
@@ -102,10 +132,12 @@ white background
 
 ## 训练计划
 
-### 阶段一：MVP（1-2 周）
+### 阶段一：MVP（1-2 周）✅
 - [x] 下载 Simple Icons 数据集（187/3400）
-- [ ] SVG → PNG 转换脚本
-- [ ] 训练 SDXL LoRA（500张测试）
+- [x] SVG → PNG 转换脚本
+- [x] 训练 SDXL LoRA v1（187张，5 epochs）
+- [x] 上传到 Hugging Face
+- [ ] 训练 v2（改进参数）
 - [ ] 制作 Spaces Demo（输入描述 → 输出 4 个候选 logo）
 
 ### 阶段二：完整版（2-4 周）
@@ -246,4 +278,40 @@ white background
 
 ---
 
-*更新时间: 2026-02-25*
+## 📊 训练记录
+
+### v1 (2026-03-01)
+- **数据集**: 187 个 Simple Icons
+- **训练参数**:
+  - Base Model: SDXL 1.0
+  - Resolution: 384x384
+  - Epochs: 5
+  - Learning Rate: 1e-4
+  - Rank: 8
+  - Mixed Precision: BF16
+- **训练时长**: 32 分钟（120 steps）
+- **最终 Loss**: 5.11e-5
+- **状态**: ✅ 已上传到 HF
+- **问题**: 损失过低，可能过拟合
+- **改进方向**: 降低学习率，减少 epochs，增加 rank
+
+---
+
+## 🗂️ 项目结构
+
+```
+lora-playground/
+├── data_collection/          # 数据收集脚本
+│   ├── fetch_simple_icons.py
+│   ├── svg_to_png.py
+│   └── ...
+├── colab_training.ipynb      # Colab 训练 notebook
+├── upload_to_hf.py          # HF 上传脚本
+├── pytorch_lora_weights.safetensors  # 训练好的权重（不提交到 git）
+├── README.md                # 本文档
+└── README_UPLOAD.md         # HF 上传指南
+```
+
+---
+
+*更新时间: 2026-03-01*
