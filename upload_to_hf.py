@@ -82,6 +82,12 @@ widget:
 
 A LoRA model trained on Simple Icons dataset for generating minimalist tech logos.
 
+## 🔗 Links
+
+- **Hugging Face Model**: https://huggingface.co/{repo_id}
+- **GitHub Repository** (Training code & tools): https://github.com/Octane0411/lora-playground
+- **Training Notebook**: [colab_training.ipynb](https://github.com/Octane0411/lora-playground/blob/main/colab_training.ipynb)
+
 ## Model Details
 
 - **Base Model**: Stable Diffusion XL 1.0
@@ -138,6 +144,26 @@ Trained using Hugging Face Diffusers library with the following parameters:
 - Optimizer: 8-bit Adam
 - Gradient Checkpointing: Enabled
 - Scheduler: Constant
+- Training Time: ~32 minutes (120 steps)
+- Final Loss: 5.11e-5
+
+For complete training configuration and code, see the [GitHub repository](https://github.com/Octane0411/lora-playground).
+
+## Known Issues
+
+This is v1 with limited training data (187 samples). The model may:
+- Generate overly simple/abstract shapes
+- Have limited style variation
+- Work best with tech-related prompts
+
+A v2 with improved parameters is in development.
+
+## Development
+
+Want to improve this model or train your own? Check out:
+- [Training notebook](https://github.com/Octane0411/lora-playground/blob/main/colab_training.ipynb)
+- [Data collection scripts](https://github.com/Octane0411/lora-playground/tree/main/data_collection)
+- [Upload guide](https://github.com/Octane0411/lora-playground/blob/main/README_UPLOAD.md)
 
 ## License
 
