@@ -48,3 +48,9 @@ dataset/
 .env.local
 .env.*.local
 
+# Model weights (too large for git, upload to HF)
+*.safetensors
+*.ckpt
+*.pth
+*.bin
+

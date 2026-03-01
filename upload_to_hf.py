@@ -6,14 +6,30 @@
 from huggingface_hub import HfApi, create_repo
 import os
 from pathlib import Path
+from dotenv import load_dotenv
+
+# 从 .env 加载配置
+load_dotenv()
 
 # 配置信息
-HF_TOKEN = input("请输入你的 Hugging Face Token: ").strip()
-REPO_NAME = input("请输入仓库名称（例如：simple-icons-lora）: ").strip()
-USERNAME = input("请输入你的 Hugging Face 用户名: ").strip()
+HF_TOKEN = os.getenv('HF_TOKEN')
+if not HF_TOKEN:
+    HF_TOKEN = input("请输入你的 Hugging Face Token: ").strip()
 
-# LoRA 文件路径（从 Google Drive 下载后的本地路径）
-LORA_PATH = input("请输入 LoRA 文件路径（.safetensors）: ").strip()
+USERNAME = os.getenv('HF_USERNAME')
+if not USERNAME:
+    USERNAME = input("请输入你的 Hugging Face 用户名: ").strip()
+
+REPO_NAME = input("请输入仓库名称 [默认: sdxl-simple-icons-lora]: ").strip() or "sdxl-simple-icons-lora"
+
+# LoRA 文件路径（默认使用项目目录）
+DEFAULT_PATH = "./pytorch_lora_weights.safetensors"
+LORA_PATH = input(f"请输入 LoRA 文件路径 [默认: {DEFAULT_PATH}]: ").strip() or DEFAULT_PATH
+
+# 验证文件是否存在
+if not os.path.exists(LORA_PATH):
+    print(f"❌ 错误：文件不存在: {LORA_PATH}")
+    exit(1)
 
 # 创建 API 实例
 api = HfApi(token=HF_TOKEN)
