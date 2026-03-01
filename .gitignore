@@ -43,3 +43,8 @@ Thumbs.db
 dataset/
 *.svg
 
+# Environment variables (contains secrets)
+.env
+.env.local
+.env.*.local
+
